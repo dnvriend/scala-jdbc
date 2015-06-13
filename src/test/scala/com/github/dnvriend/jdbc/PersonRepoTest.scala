@@ -17,5 +17,6 @@ class PersonRepoTest extends TestSpec {
     PersonRepository.person("1").success.value.value mustBe {
       case Person("1", "John", "Doe", _) =>
     }
+    PersonRepository.person("0").success.value shouldBe None
   }
 }

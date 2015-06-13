@@ -8,7 +8,7 @@ Pro's:
 - If you want to create reactive applications or advanced features (like async/streaming) please use [Slick 3.0](http://slick.typesafe.com) and don't use this library.
 
 # Dependency
-To include the JDBC plugin into your sbt project, add the following lines to your build.sbt file:
+To include the JDBC library, add the following lines to your build.sbt file:
 
 ```
 resolvers += "dnvriend at bintray" at "http://dl.bintray.com/dnvriend/maven"
@@ -17,7 +17,8 @@ libraryDependencies += "com.github.dnvriend" %% "scala-jdbc" % "1.0.0"
 ```
     
 # Usage
-1. Configure:
+## Configure:
+Put the following in your `application.conf`. The name `docker` is a database configuration that will be used when creating a `JdbcConnection`.
 
 ```
 jdbc-connection {
@@ -33,7 +34,10 @@ jdbc-connection {
 }
 ```
 
-2. Setting up a connection:
+## Setting up a connection:
+A connection can be created by creating an `implicit val` which is a JdbcConfig with JdbcConnection. Set the name of the
+database configuration to whatever you used in `application.conf`. In the example, the name is `docker`. When using `akka`
+the config can be loaded from the default `ActorSystem`.
 
 ```scala
 import com.github.dnvriend.jdbc._
@@ -43,8 +47,12 @@ implicit val conn: JdbcConnection = new JdbcConfig with JdbcConnection {
 }
 ```
 
-3. Example using in a repository:
-
+## Example using in a repository:
+Using the [Repository Pattern](https://lostechies.com/jimmybogard/2009/09/03/ddd-repository-implementation-patterns/) and 
+a little bit of FP, and some Scala trickeries, we can create an example PersonRepository that will (un)marshal case classes
+for us from/to a database table, with the added bonus that everything works based on plain old SQL queries. You can execute
+every query you wish, create joins, unions, and everything can be converted to a Seq of case classes.
+  
 ```scala
 import java.sql.ResultSet
 
