@@ -1,7 +1,6 @@
 package com.github.dnvriend.jdbc
 
 import java.sql.ResultSet
-import java.util.Date
 
 import scala.util.Try
 
