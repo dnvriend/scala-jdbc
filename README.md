@@ -3,18 +3,37 @@ A small library that makes working with JDBC databases a lot easier.
 
 Pro's:
 - Small library,
-- Very accessible to Java/Scala programmers that just want to do SQL
-- For advanced features please use Slick 3.0
+- Small number of well known dependencies (typesafe-config, commons-dbcp, scala-arm and your JDBC driver of choice),    
+- Very accessible to Java/Scala programmers that just want to do [SQL](https://en.wikipedia.org/wiki/SQL),
+- If you want to create reactive applications or advanced features (like async/streaming) please use [Slick 3.0](http://slick.typesafe.com) and don't use this library.
 
 # Dependency
 To include the JDBC plugin into your sbt project, add the following lines to your build.sbt file:
 
-    resolvers += "dnvriend at bintray" at "http://dl.bintray.com/dnvriend/maven"
+```
+resolvers += "dnvriend at bintray" at "http://dl.bintray.com/dnvriend/maven"
 
-    libraryDependencies += "com.github.dnvriend" %% "scala-jdbc" % "1.0.0"
+libraryDependencies += "com.github.dnvriend" %% "scala-jdbc" % "1.0.0"
+```
     
 # Usage
-Setting up a connection:
+1. Configure:
+
+```
+jdbc-connection {
+  docker {
+    username           = "docker"
+    password           = "docker"
+    driverClassName    = "org.postgresql.Driver"
+    url                = "jdbc:postgresql://boot2docker:5432/docker"
+    initialSize        = 1
+    maxIdle            = 1
+    maxActive          = 1
+  }
+}
+```
+
+2. Setting up a connection:
 
 ```scala
 import com.github.dnvriend.jdbc._
@@ -24,7 +43,7 @@ implicit val conn: JdbcConnection = new JdbcConfig with JdbcConnection {
 }
 ```
 
-Using in a Repository:
+3. Example using in a repository:
 
 ```scala
 import java.sql.ResultSet
